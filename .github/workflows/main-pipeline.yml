@@ -17,5 +17,26 @@ jobs:
         run: |
           set -ev
           cd modern-web-app
-          npm i
+          npm ci
           npm run test:unit
+   Build:
+      runs-on: ubuntu-latest
+      needs: Unittest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-node@v3
+          with:
+            node-version: 18
+        - name: "Lanzar Build"
+          run: |
+            set -ev
+            cd modern-web-app
+            npm ci
+            npm run test:unit
+        - name: Upload artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: modern-web-app-v${{ github.sha }}
+            path: modern-web-app/.next/
+
+
